@@ -399,6 +399,7 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
 		   -std=gnu89
+
 #GCC 5.x.x
 KBUILD_CFLAGS += -fdiagnostics-color=always -fdiagnostics-show-option \
 		   -Wno-maybe-uninitialized -Wno-unused-variable -Wno-unused-function \
