@@ -2145,8 +2145,9 @@ __wlan_hdd_cfg80211_get_supported_features(struct wiphy *wiphy,
 		hdd_debug("NAN is supported by firmware");
 		fset |= WIFI_FEATURE_NAN;
 	}
-	if (sme_is_feature_supported_by_fw(RTT)) {
-		hdd_debug("RTT is supported by firmware");
+	if (sme_is_feature_supported_by_fw(RTT) &&
+	    pHddCtx->config->enable_rtt_support) {
+		hdd_debug("RTT is supported by firmware and framework");
 		fset |= WIFI_FEATURE_D2D_RTT;
 		fset |= WIFI_FEATURE_D2AP_RTT;
 	}
@@ -9277,6 +9278,8 @@ static int hdd_validate_avoid_freq_chanlist(hdd_context_t *hdd_ctx,
 		for (ch_idx = channel_list->avoidFreqRange[range_idx].startFreq;
 		     ch_idx <= channel_list->avoidFreqRange[range_idx].endFreq;
 		     ch_idx++) {
+			 if (INVALID_CHANNEL == cds_get_channel_enum(ch_idx))
+				continue;
 			for (unsafe_channel_index = 0;
 			     unsafe_channel_index < unsafe_channel_count;
 			     unsafe_channel_index++) {
@@ -11390,7 +11393,7 @@ static int __wlan_hdd_cfg80211_set_nud_stats(struct wiphy *wiphy,
 		}
 	}
 
-	QDF_TRACE(QDF_MODULE_ID_HDD, QDF_TRACE_LEVEL_INFO,
+	QDF_TRACE(QDF_MODULE_ID_HDD, QDF_TRACE_LEVEL_DEBUG,
 		  "%s STATS_SET_START Received flag %d!!", __func__,
 		  arp_stats_params.flag);
 
