@@ -6921,9 +6921,13 @@ static int start_cpu(bool boosted)
 	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
 	int start_cpu;
 
+	if(!sched_feat(STUNE_BOOST_BIAS_BIG))
+		return walt_start_cpu(rd->min_cap_orig_cpu);
+
 	start_cpu = boosted ? rd->max_cap_orig_cpu : rd->min_cap_orig_cpu;
 
 	return walt_start_cpu(start_cpu);
+
 }
 
 unsigned int sched_smp_overlap_capacity;
